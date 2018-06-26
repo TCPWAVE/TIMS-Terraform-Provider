@@ -186,6 +186,38 @@ Example: "${tims_cloud_subnet.resourceName.v4_Address}"|Required|
         depends_on = ["tims_subnet.esubnet"]
         }
         
+## 5.6	tims_object_rr
+This resource creates resource record at object/network/zone level with the specified details. The parameter scope determines the context in which resource record will be created.
+
+|Param Name|Description|Properties|
+|-------------|-------------|-------------|
+|scope|	Takes 'object', 'zone' or 'network'. Defines the context in which the resource record is being added. |	Required|
+|Owner|	Owner name of the resource record.                Should point to a valid A record for records of type 'SRV'.
+Should be a valid domain name for records of type 'A'.
+ Should be a valid alias for records of type CNAME
+Should be a valid IP Address for records of type PTR
+Should be a valid domain name for records of type NS|	Optional|
+|Class|	Indicates the class of the resource record. Support only 'IN' currently|Required|
+|Type|	Indicates the type of the resource record. Takes one of 'A','CNAME', MX','SRV','NS','TXT','NAPTR','PTR'	|Required|
+|Ttl|	Indicates the time-to-live value specified in number of seconds for the resource record.|Required|
+|Ip|	IP address of the target object in TCPWave IPAM when defining resource record of type 'A'.|	Required|
+|Domain|Domain name in data part of a PTR resource record.|Optional|
+|organization|Organization name to be specified for resource records of type NS. If this argument is omitted, the root zone will be selected from the organization the user is associated with. This argument is mandatory if user is 'FADM'.|Required|
+|Service|Service name associated with an SRV resource record.|Optional|
+|Protocol|Protocol associated with an SRV resource record|Optional|
+|host_name|Host name in data part of a PTR resource record|Optional|
+|Cname|	CNAME data part of a CNAME record.|Optional|
+|pref_num|Preference number associated with an MX resource record.|Optional|
+|mail_host|Name of the server hosting the mail service associated with an MX resource record.|Optional|
+|Priority|Priority number associated with an SRV resource record.|Optional|
+|Weight|Weight associated with an SRV resource record.|Optional|
+|Port|	Port number associated with an SRV resource record.|Optional|
+|srvc_host|Name of the server hosting the service associated with an SRV record.|Optional|
+|Txt|Text associated with a TXT resource record.|Optional|
+|Regexp|Regexp value associated with an NAPTR resource record.|Optional|
+|Flag|Flag value associated with an NAPTR resource record.|Optional|
+|Order|	Order number associated with an NAPTR resource record.|	Optional|
+
 
 
 
