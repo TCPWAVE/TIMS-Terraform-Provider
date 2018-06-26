@@ -77,8 +77,7 @@ This resource must have dependency on tims_cloud_vpc.
 
 | Param Name | Description | Properties |
 |-------------|-------------|-------------|
-| Ip | IP Address part of the network (Example: 10.1.10.0). This can be taken from output parameter: ip of tims_cloud_vpc. 
-Example: "${tims_cloud_vpc. resoruceName.ip}" | Required  |
+| Ip | IP Address part of the network (Example: 10.1.10.0). This can be taken from output parameter: ip of tims_cloud_vpc. Example: "${tims_cloud_vpc. resoruceName.ip}" | Required  |
 | name | Name of the network in IPAM  | Required|
 |Org_name|Organization in IPAM. This must be same as the org_name in tims_cloud_vpc in order to get non-duplicated VPC’s in multiple cloud providers.|Required|
 |mask|Mask of the network.|Required|
@@ -112,8 +111,7 @@ This resource must have dependency on tims_network.
 |cidr|IP Address of the Subnet in CIDR format (For Ex: 10.1.10.0/24). If this value is provided, Subnet will be created for this CIDR.|Either of cidr or mask must be provided.|
 |mask|Mask of the VPC to be created. Either of CIDR or Mask must be provided. If only Mask is provided, Subnet will be created with next available CIDR of the given mask. |Either of cidr or mask must be provided.|
 |org_name|Organization Name created in IPAM|Required|
-|vpc_id|VPC Id in which Subnet is to be created. VPC Id of the VPC created using tims_cloud_vpc can be used here. 
-Example: "${tims_cloud_vpc.resourceName.vpc_id}"|Required|
+|vpc_id|VPC Id in which Subnet is to be created. VPC Id of the VPC created using tims_cloud_vpc can be used here. Example: "${tims_cloud_vpc.resourceName.vpc_id}"|Required|
 |v4_Address|The IPv4 CIDR block for the created Subnet (For ex: 10.1.10.0/24)|Computed|
 |subnet_id|The ID of the created Subnet.| Computed|
 |available_ips_count|Available Ip’s count of the created Subnet.| Computed|
@@ -137,16 +135,12 @@ This resource must have dependency on tims_cloud_subnet.
 
 |Param Name|Description|Properties|
 |-------------|-------------|-------------|
-|Ip|IP Address part of the Subnet (Example: 10.1.10.0). This can be taken from output parameter: ip of tims_cloud_subnet. 
-Example:
- "${tims_cloud_subnet. resoruceName.ip}"|Required|
+|Ip|IP Address part of the Subnet (Example: 10.1.10.0). This can be taken from output parameter: ip of tims_cloud_subnet. Example: "${tims_cloud_subnet. resoruceName.ip}"|Required|
 |Name|Name of the Subnet in IPAM|Optional|
 |org_name|Organization in IPAM. |Required|
 |Mask|Mask of the network.|Required|
 |router_address|Router Address in the Subnet. If it is not provided, first IP will be created as Router Object in IPAM.|Optional|
-|network_address|IP Address part of the Network (Example: 10.1.10.0). This can be taken from output parameter: ip of tims_cloud_vpc. 
-Example:
- "${tims_cloud_vpc. resoruceName.ip}"| Required|
+|network_address|IP Address part of the Network (Example: 10.1.10.0). This can be taken from output parameter: ip of tims_cloud_vpc. Example:"${tims_cloud_vpc. resoruceName.ip}"| Required|
 |primary_domain|Resource records will be updated in this domain.| Required|
 |cloud_provider|If Cloud provider is provided, Objects can be imported from Cloud. Once AWS Instances are imported from Cloud, these Objects will be associated with AWS Instances. User can change state of the AWS Instance or terminate or view details from IPAM Object grid.|Optional|
 
@@ -177,9 +171,7 @@ This resource must have dependency on tims_subnet.
 |description|The description of the Object|Optional|
 |Ttl|TTL value of the Object record in the specified domain|Required|
 |allocation_type|Allocation type of the Object. Valid values are 1 and 2. 1 represents Static Object. 2 represents dynamic Object that contributes into DHCP scope.|Required|
-|subnet_address|Subnet full address. Example: 10.1.10.0/24.
-This can be derived from tims_cloud_subnet resource. 
-Example: "${tims_cloud_subnet.resourceName.v4_Address}"|Required|
+|subnet_address|Subnet full address. Example: 10.1.10.0/24. This can be derived from tims_cloud_subnet resource. Example: "${tims_cloud_subnet.resourceName.v4_Address}"|Required|
 
 ### Example:
         resource "tims_object" "eobj01" {
