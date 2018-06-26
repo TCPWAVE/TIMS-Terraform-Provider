@@ -390,7 +390,12 @@ Below sample .tf file creates a next available VPC in AWS for the given mask len
         depends_on = ["tims_subnet.esubnet"]
         }
         
-
+# 8.	Use cases
+Few examples to show the usage and purpose of resources is provided below.
+<picture>
+        
+# 9.	Conclusion
+By using tims terraform provider, user can leverage the capability to manage VPCs, Subnets, VMs and Resource records from IPAM after infrastructure is created using Terraform. Single terraform template can manage multiple cloud providers.
 
 
 
