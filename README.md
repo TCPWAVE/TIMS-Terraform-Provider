@@ -8,7 +8,7 @@ Terraform uses text files to describe infrastructure and to set variables. These
 ![terraform execution stages](https://user-images.githubusercontent.com/4006576/41900548-9cfc59da-794c-11e8-8cc1-677b1616686e.png)
 Figure 1: Terraform execution stages
 # 2.	TIMS Terraform Provider Architectural Diagram
-<Picture Terraform Provider diagram>
+![terraform provider diagram](https://user-images.githubusercontent.com/4006576/41908424-87d1f50a-7961-11e8-9665-7cebee839d54.png)
 
 # 3.	TIMS Terraform Provider Details
 TCPWave IPAM is integrated with Terraform to provide resources that can create or delete VPC, Subnet, VM in Cloud and corresponding Network, Subnet, Object and Resource Records in IPAM. terraform-provider-tims acts as Terraform Provider for TCPWave IPAM.
