@@ -7,7 +7,9 @@ Terraform uses text files to describe infrastructure and to set variables. These
 
 ![terraform execution stages](https://user-images.githubusercontent.com/4006576/41900548-9cfc59da-794c-11e8-8cc1-677b1616686e.png)
 Figure 1: Terraform execution stages
+
 # 2.	TIMS Terraform Provider Architectural Diagram
+
 ![terraform provider diagram](https://user-images.githubusercontent.com/4006576/41908424-87d1f50a-7961-11e8-9665-7cebee839d54.png)
 
 # 3.	TIMS Terraform Provider Details
@@ -25,12 +27,14 @@ Example below shows the format of .tf file and execution steps involved in using
 
 
 TIMS-Session-Token is used to authenticate the user.  This token can be created in ‘Session Tokens’ page in IPAM. Tims Terraform Provider uses the URL mentioned to connect to IPAM and perform further actions. 
+
 # 4.	Terraform Execution Steps
 ### Step 1:
 Go to the directory where terraform-provider-tims.exe is present and save the .tf file in the same directory.Execute the command terraform plan. This shows the execution plan.
 
 ### Step 2:
 Execute the command terraform apply. This will execute the plan and add, modify or deletes resources.
+
 # 5.	Resources
 Current version of terraform-provider-tims provides create/delete functionality of the resources explained below. 
 ## 5.1 tims_cloud_vpc
@@ -93,6 +97,7 @@ Example: "${tims_cloud_vpc. resoruceName.ip}" | Required  |
         zone_template = "cloud_zone_template"
         depends_on = ["tims_cloud_vpc.evpc"]
         }
+
 ## 5.3 tims_cloud_subnet
 This resource will create a Subnet in the given VPC in AWS Cloud account provided. If cidr is not given, next available Subnet will be created for the given mask. 
 
@@ -124,6 +129,7 @@ Example: "${tims_cloud_vpc.resourceName.vpc_id}"|Required|
         org_name = "Internal"
         depends_on = ["tims_network.enw"]|
         }
+
 ## 5.4 tims_subnet
 This resource creates a subnet in IPAM with the given IP and mask in the given network in the organization.  If router_addess is not specified, First Object in the Subnet will be created as a Router Object. 
 
@@ -155,6 +161,7 @@ Example:
         cloud_provider = "aws"
         depends_on = ["tims_network.enw"]
         }
+
 ## 5.5	tims_object
 This resource creates an Object with the specified IP Address in the specified Subnet and Organization in IPAM. 
 
@@ -238,6 +245,7 @@ This resource creates resource record at object/network/zone level with the spec
         subnet_address = "${tims_cloud_subnet.ecsubnet1.v4_Address}"
         depends_on = ["tims_subnet.esubnet"]
         }
+
 # 6.	Non - duplicate VPC in Multiple Cloud Providers
 To create non-duplicate VPCs in multiple cloud providers, user needs to make sure to follow below guidelines while creating template.
 1.	org_name value must be same for all resources.
