@@ -396,48 +396,39 @@ Below sample .tf file creates a next available VPC in AWS for the given mask len
 Few examples to show the usage and purpose of resources is provided below.
 
 ![8 1](https://user-images.githubusercontent.com/4006576/41909466-b3e093a6-7964-11e8-9299-f11740033ed5.png)
-
-Fig. 8.1 shows the input template for resource tims_cloud_vpc using mask to create next available VPC
+*Fig. 8.1 shows the input template for resource tims_cloud_vpc using mask to create next available VPC*
 
 
 ![8 2](https://user-images.githubusercontent.com/4006576/41909475-b9cf7bce-7964-11e8-991e-a96a6e9771a1.png)
-
-Fig 8.2 shows the VPC 1.1.0.0/16 created in AWS
+*Fig 8.2 shows the VPC 1.1.0.0/16 created in AWS*
 
 
 ![8 3](https://user-images.githubusercontent.com/4006576/41909488-c17d5d14-7964-11e8-9896-162512376d8b.png)
-
-Fig 8.3 shows the input template for resource tims_cloud_vpc using cidr to create next available VPC
+*Fig 8.3 shows the input template for resource tims_cloud_vpc using cidr to create next available VPC*
 
 
 ![8 4](https://user-images.githubusercontent.com/4006576/41909497-c672340c-7964-11e8-844c-b8a674a6178d.png)
-
-Fig 8.4 shows the VPC 15.0.0.0/16 created in AWS
+*Fig 8.4 shows the VPC 15.0.0.0/16 created in AWS*
 
 
 ![8 5](https://user-images.githubusercontent.com/4006576/41909504-cd01da20-7964-11e8-9197-03b21c4c1b66.png)
-
-Fig 8.5 shows the input template for resource tims_network to create Network in IPAM
+*Fig 8.5 shows the input template for resource tims_network to create Network in IPAM*
 
 
 ![8 6](https://user-images.githubusercontent.com/4006576/41909509-d0eea136-7964-11e8-865f-bca80fa36d7b.png)
-
-Fig 8.6 shows the input template for resource tims_cloud_subnet to create Subnet in AWS
+*Fig 8.6 shows the input template for resource tims_cloud_subnet to create Subnet in AWS*
 
 
 ![8 7](https://user-images.githubusercontent.com/4006576/41909515-d5e16f16-7964-11e8-9455-53131554fd36.png)
-
-Fig 8.7 shows the subnet 15.0.0.0/24 created in AWS
+*Fig 8.7 shows the subnet 15.0.0.0/24 created in AWS*
 
 
 ![8 8](https://user-images.githubusercontent.com/4006576/41909528-db00e904-7964-11e8-8ff6-10de94055080.png)
-
-Fig 8.8 shows the input template for resource tims_ subnet to create Subnet in IPAM
+*Fig 8.8 shows the input template for resource tims_ subnet to create Subnet in IPAM*
 
 
 ![8 9](https://user-images.githubusercontent.com/4006576/41909544-e285ecc4-7964-11e8-8c6e-2c96c98299d0.png)
-
-Fig 8.9 shows the input template for resource tims_ object to create Object in IPAM
+*Fig 8.9 shows the input template for resource tims_ object to create Object in IPAM*
 
 
 # 9.	Conclusion
