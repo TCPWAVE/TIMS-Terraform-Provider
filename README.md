@@ -192,11 +192,7 @@ This resource creates resource record at object/network/zone level with the spec
 |Param Name|Description|Properties|
 |-------------|-------------|-------------|
 |scope|	Takes 'object', 'zone' or 'network'. Defines the context in which the resource record is being added. |	Required|
-|Owner|	Owner name of the resource record.                Should point to a valid A record for records of type 'SRV'.
-Should be a valid domain name for records of type 'A'.
- Should be a valid alias for records of type CNAME
-Should be a valid IP Address for records of type PTR
-Should be a valid domain name for records of type NS|	Optional|
+|Owner|	Owner name of the resource record. Should point to a valid A record for records of type 'SRV'. Should be a valid domain name for records of type 'A'. Should be a valid alias for records of type CNAME. Should be a valid IP Address for records of type PTR. Should be a valid domain name for records of type NS|Optional|
 |Class|	Indicates the class of the resource record. Support only 'IN' currently|Required|
 |Type|	Indicates the type of the resource record. Takes one of 'A','CNAME', MX','SRV','NS','TXT','NAPTR','PTR'	|Required|
 |Ttl|	Indicates the time-to-live value specified in number of seconds for the resource record.|Required|
@@ -217,6 +213,183 @@ Should be a valid domain name for records of type NS|	Optional|
 |Regexp|Regexp value associated with an NAPTR resource record.|Optional|
 |Flag|Flag value associated with an NAPTR resource record.|Optional|
 |Order|	Order number associated with an NAPTR resource record.|	Optional|
+|Params|Params value associated with an NAPTR resource record.|	Optional|
+|Replace|Replace field associated with an NAPTR resource record.|Optional|
+|name_server|Name Server or data part a NS resource record|Optional|
+|view_name|DNS view name in which resource record is being created. This argument is applicable when scope is zone or object|Optional|
+|zone_name|Zone name of the target zone in TCPWave IPAM when the scope is zone.	|Optional|
+|is_external_rr|Takes 'true' or 'false'. If this argument is specified as 'true’, resource record being added will be added as an external resource record. This argument is applicable when scope is zone else it will be ignored.|Optional|
+|proxy_root_zone|DNS Proxy root zone flag. It takes 'true' or 'false'. If it is specified as 'true’, resource record being added will be added as a proxy root zone resource record. If it is specified as 'false' resource record being added will be added as a root zone resource record. This argument is applicable when scope is zone and zone_name is. (dot).||
+|network_address|IP Address of the network in TCPWave IPAM when scope is network.||
+|Description|Description for the resource record.||
+
+### Example:    
+        resource "tims_object" "eobj01" {
+        ip = "1.2.0.6"
+        name = "CloudObject1206"
+        org_name = "Internal"
+        domain_name = "tcpwave.com"
+        object_type = "AWS Instance"
+        description = "Object Created by Terraform Tims Provider"
+        ttl = "1400"
+        allocation_type = "1"
+        subnet_address = "${tims_cloud_subnet.ecsubnet1.v4_Address}"
+        depends_on = ["tims_subnet.esubnet"]
+        }
+# 6.	Non - duplicate VPC in Multiple Cloud Providers
+To create non-duplicate VPCs in multiple cloud providers, user needs to make sure to follow below guidelines while creating template.
+1.	org_name value must be same for all resources.
+2.	Creation of VPC must be followed by creation of the same network in IPAM.
+3.	All the resources must be executed sequentially. This can be achieved in Terraform by providing dependency on the previous resource using depends_on parameter. 
+Example:  depends_on = ["tims_subnet.esubnet"]
+
+# 7.	Sample .tf file 
+Below sample .tf file creates a next available VPC in AWS for the given mask length, next available subnet in AWS for the given mask length in the VPC created, Network and Subnet in IPAM, Objects in IPAM as well as Virtual Machines in AWS and Object resource record.
+       
+       provider "tims" {
+         TIMS-Session-Token = "5e8cf446-9a2d-46aa-87c5-e3e21b8885"
+        URL = "https://12.1.10.1:7443/tims"
+        }       
+        resource "tims_cloud_vpc" "vpc" {
+        cloud_provider = "AWS"
+        name = "TerraformNetwork"
+        mask = "16"
+        tenancy = "default"
+        org_name = "TCPWave"
+        }
+        resource "tims_network" "enw" {
+        ip = "${tims_cloud_vpc.vpc.ip}"
+        name = "TerraformNetwork"
+        mask = 16
+        org_name = "TCPWave"
+        email = "admin@tcpwave.com"
+        desc =  "Test"
+        zone_template = "TCPWave Standard Template"
+        depends_on = ["tims_cloud_vpc.vpc"]
+        }
+        resource "tims_cloud_subnet" "cloudSubnet" {
+        cloud_provider = "AWS"
+        name = "TerraformSubnet"
+        mask = "24"
+        vpc_id = "${tims_cloud_vpc.vpc.vpc_id}"
+        org_name = "TCPWave"
+        depends_on = ["tims_network.enw"]
+        }
+        resource "tims_subnet" "esubnet" {
+        ip =  "${tims_cloud_subnet.cloudSubnet.ip}"
+        name = "TerraformSubnet"
+        mask = "24"
+        org_name = "TCPWave"
+        network_address =  "${tims_cloud_vpc.vpc.ip}"
+        primary_domain = "adomain.com"
+        cloud_provider = "AWS"
+        depends_on = ["tims_cloud_subnet.cloudSubnet"]
+        }
+        resource "tims_object" "vm001" {
+        ip = "2.0.0.7"
+        name = "TerraformInstance1"
+        org_name = "TCPWave"
+        domain_name = "adomain.com"
+        object_type = "AWS Instance"
+        description = "Object Created by Terraform Tims Provider"
+        ttl = "1400"
+        allocation_type = "1"
+        subnet_address = "2.0.0.0/24"
+        cloud_instance_template = "AWS instance template"
+                depends_on = ["tims_subnet.esubnet"]
+        }
+        resource "tims_object" "vm002" {
+        ip = "2.0.0.8"
+        name = "TerraformInstance2"
+        org_name = "TCPWave"
+        domain_name = "adomain.com"
+        object_type = "AWS Instance"
+        description = "Object Created by Terraform Tims Provider"
+        ttl = "1400"
+        allocation_type = "1"
+        subnet_address = "2.0.0.0/24"
+        cloud_instance_template = "AWS instance template"
+                depends_on = ["tims_subnet.esubnet"]
+        }
+        resource "tims_object" "vm003" {
+        ip = "2.0.0.9"
+        name = "TerraformInstance2"
+        org_name = "TCPWave"
+        domain_name = "adomain.com"
+        object_type = "AWS Instance"
+        description = "Object Created by Terraform Tims Provider"
+        ttl = "1400"
+        allocation_type = "1"
+        subnet_address = "2.0.0.0/24"
+        cloud_instance_template = "AWS instance template"
+                depends_on = ["tims_subnet.esubnet"]
+        }
+        resource "tims_object" "vm004" {
+        ip = "2.0.0.10"
+        name = "TerraformInstance4"
+        org_name = "TCPWave"
+        domain_name = "adomain.com"
+        object_type = "AWS Instance"
+        description = "Object Created by Terraform Tims Provider"
+        ttl = "1400"
+        allocation_type = "1"
+        subnet_address = "2.0.0.0/24"
+        cloud_instance_template = "AWS instance template"
+                depends_on = ["tims_subnet.esubnet"]
+        }
+        resource "tims_object" "vm005" {
+        ip = "2.0.0.11"
+        name = "TerraformInstance5"
+        org_name = "TCPWave"
+        domain_name = "adomain.com"
+        object_type = "AWS Instance"
+        description = "Object Created by Terraform Tims Provider"
+        ttl = "1400"
+        allocation_type = "1"
+        subnet_address = "2.0.0.0/24"
+        cloud_instance_template = "AWS instance template"
+                depends_on = ["tims_subnet.esubnet"]
+        }
+        resource "tims_object" "vm006" {
+        ip = "2.0.0.12"
+        name = "TerraformInstance6"
+        org_name = "TCPWave"
+        domain_name = "adomain.com"
+        object_type = "AWS Instance"
+        description = "Object Created by Terraform Tims Provider"
+        ttl = "1400"
+        allocation_type = "1"
+        subnet_address = "2.0.0.0/24"
+        cloud_instance_template = "AWS instance template"
+                depends_on = ["tims_subnet.esubnet"]
+        }
+        resource "tims_object_rr" "objrr001" {
+        scope = "object"
+        cname = "TerraformInstance1.adomain.com."
+        class = "IN"
+        type = "CNAME"
+        ttl = "1200"
+        owner =  "one.adomain.com."
+        ip = "2.0.0.7"
+        domain = "adomain.com"
+        organization = "TCPWave"
+        description = "CNAME Record"
+                depends_on = ["tims_object.vm001"]
+                }
+
+        resource "tims_object" "eobj01" {
+        ip = "1.2.0.6"
+        name = "CloudObject1206"
+        org_name = "Internal"
+        domain_name = "tcpwave.com"
+        object_type = "AWS Instance"
+        description = "Object Created by Terraform Tims Provider"
+        ttl = "1400"
+        allocation_type = "1"
+        subnet_address = "${tims_cloud_subnet.ecsubnet1.v4_Address}"
+        depends_on = ["tims_subnet.esubnet"]
+        }
+        
 
 
 
