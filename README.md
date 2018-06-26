@@ -64,13 +64,13 @@ Note: If multiple VPC’s have to be added in multiple cloud providers with non-
         org_name = "Internal"
         }
        
-       
- 
+   
 ## 5.2 tims_network
 This resource creates a network in IPAM with the given IP and mask in the given organization. If Zone template which is associated with AWS Cloud providers is provided, the resource records of Network/Object will be updated in those Cloud providers. 
 This resource must have dependency on tims_cloud_vpc.
 
 | Param Name | Description | Properties |
+|-------------|-------------|-------------|
 | Ip | IP Address part of the network (Example: 10.1.10.0). This can be taken from output parameter: ip of tims_cloud_vpc. 
 Example: "${tims_cloud_vpc. resoruceName.ip}" | Required  |
 | name | Name of the network in IPAM  | Required|
@@ -92,3 +92,25 @@ Example: "${tims_cloud_vpc. resoruceName.ip}" | Required  |
         depends_on = ["tims_cloud_vpc.evpc"]
         }
 ## 5.3 tims_cloud_subnet
+This resource will create a Subnet in the given VPC in AWS Cloud account provided. If cidr is not given, next available Subnet will be created for the given mask. 
+
+Algorithm to calculate next available Subnet: While calculating next available Subnet in a given VPC, next available Subnet in AWS will be calculated first, this value will be compared with all the Subnets present in IPAM for the given Network in the given Organization. If this value clashes with existing Subnet in IPAM, next Subnet will be taken into account. This loop repeats until we get non-duplicated Subnet. 
+
+This resource must have dependency on tims_network.
+
+|Param Name|Description|Properties|
+|-------------|-------------|-------------|
+|cloud_provider|The name of the cloud provider created in IPAM in the specified org_name|Required|
+|name|The name of the Subnet to be created.|Optional|
+|cidr|IP Address of the Subnet in CIDR format (For Ex: 10.1.10.0/24). If this value is provided, Subnet will be created for this CIDR.|Either of cidr or mask must be provided.|
+|mask|Mask of the VPC to be created. Either of CIDR or Mask must be provided. If only Mask is provided, Subnet will be created with next available CIDR of the given mask. |Either of cidr or mask must be provided.|
+|org_name|Organization Name created in IPAM|Required|
+|vpc_id|VPC Id in which Subnet is to be created. VPC Id of the VPC created using tims_cloud_vpc can be used here. 
+Example: "${tims_cloud_vpc.resourceName.vpc_id}"|Required|
+|v4_Address|The IPv4 CIDR block for the created Subnet (For ex: 10.1.10.0/24)|Computed|
+|subnet_id|The ID of the created Subnet.| Computed|
+|available_ips_count|Available Ip’s count of the created Subnet.| Computed|
+|state|The current state of the created Subnet.|Computed|
+| Ip| IP part of the Subnet created. Ex: 10.1.10.0|Computed|
+
+
