@@ -113,4 +113,80 @@ Example: "${tims_cloud_vpc.resourceName.vpc_id}"|Required|
 |state|The current state of the created Subnet.|Computed|
 | Ip| IP part of the Subnet created. Ex: 10.1.10.0|Computed|
 
+### Example:
+        resource "tims_cloud_subnet" "ecsubnet" {
+        cloud_provider = "aws"
+        name = "TerraformSubnet"
+        mask = "24"
+        vpc_id = "${tims_cloud_vpc.evpc.vpc_id}"
+        org_name = "Internal"
+        depends_on = ["tims_network.enw"]|
+        }
+## 5.4 tims_subnet
+This resource creates a subnet in IPAM with the given IP and mask in the given network in the organization.  If router_addess is not specified, First Object in the Subnet will be created as a Router Object. 
+
+This resource must have dependency on tims_cloud_subnet.
+
+|Param Name|Description|Properties|
+|-------------|-------------|-------------|
+|Ip|IP Address part of the Subnet (Example: 10.1.10.0). This can be taken from output parameter: ip of tims_cloud_subnet. 
+Example:
+ "${tims_cloud_subnet. resoruceName.ip}"|Required|
+|Name|Name of the Subnet in IPAM|Optional|
+|org_name|Organization in IPAM. |Required|
+|Mask|Mask of the network.|Required|
+|router_address|Router Address in the Subnet. If it is not provided, first IP will be created as Router Object in IPAM.|Optional|
+|network_address|IP Address part of the Network (Example: 10.1.10.0). This can be taken from output parameter: ip of tims_cloud_vpc. 
+Example:
+ "${tims_cloud_vpc. resoruceName.ip}"| Required|
+|primary_domain|Resource records will be updated in this domain.| Required|
+|cloud_provider|If Cloud provider is provided, Objects can be imported from Cloud. Once AWS Instances are imported from Cloud, these Objects will be associated with AWS Instances. User can change state of the AWS Instance or terminate or view details from IPAM Object grid.|Optional|
+
+### Example:
+        resource "tims_subnet" "esubnet" {
+        ip =  "${tims_cloud_subnet.ecsubnet1.ip}"
+        name = "CloudSubnet"
+        mask = "24"
+        org = "Internal"
+        network_address =  "${tims_cloud_vpc.evpc.ip}"
+        primary_domain = "tcpwave.com"
+        cloud_provider = "aws"
+        depends_on = ["tims_network.enw"]
+        }
+## 5.5	tims_object
+This resource creates an Object with the specified IP Address in the specified Subnet and Organization in IPAM. 
+
+This resource must have dependency on tims_subnet.
+
+|Param Name|Description|Properties|
+|-------------|-------------|-------------|
+|Ip|IP Address of the Object to be created. Example: 10.1.10.7| Required|
+|Name|Name of the Object in IPAM.|Required|
+|org_name|Organization in IPAM.|Required|
+|domain_name|Domain name into which this object will be allocated.|Required|
+|object_type|The type of the Object.|Required|
+|description|The description of the Object|Optional|
+|Ttl|TTL value of the Object record in the specified domain|Required|
+|allocation_type|Allocation type of the Object. Valid values are 1 and 2. 1 represents Static Object. 2 represents dynamic Object that contributes into DHCP scope.|Required|
+|subnet_address|Subnet full address. Example: 10.1.10.0/24.
+This can be derived from tims_cloud_subnet resource. 
+Example: "${tims_cloud_subnet.resourceName.v4_Address}"|Required|
+
+### Example:
+        resource "tims_object" "eobj01" {
+        ip = "1.2.0.6"
+        name = "CloudObject1206"
+        org_name = "Internal"
+        domain_name = "tcpwave.com"
+        object_type = "AWS Instance"
+        description = "Object Created by Terraform Tims Provider"
+        ttl = "1400"
+        allocation_type = "1"
+        subnet_address = "${tims_cloud_subnet.ecsubnet1.v4_Address}"
+        depends_on = ["tims_subnet.esubnet"]
+        }
+        
+
+
+
 
