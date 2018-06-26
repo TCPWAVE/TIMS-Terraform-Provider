@@ -20,7 +20,9 @@ Provider is present in /opt/tcpwave/terraform folder. There is also a sample tem
 terraform.exe is present in /opt/tcpwave/bin.
 
 Example below shows the format of .tf file and execution steps involved in using tims terraform provider. The resource tims_cloud_vpc is taken as example. tims_cloud_vpc creates next available VPC in AWS with the given mask or given cidr.
-<Example picture>
+
+![example picture](https://user-images.githubusercontent.com/4006576/41908498-cfb16d38-7961-11e8-88db-255e753882b4.png)
+
 
 TIMS-Session-Token is used to authenticate the user.  This token can be created in ‘Session Tokens’ page in IPAM. Tims Terraform Provider uses the URL mentioned to connect to IPAM and perform further actions. 
 # 4.	Terraform Execution Steps
